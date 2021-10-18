@@ -36,6 +36,7 @@ type alias Model =
     , wilksScore : Float
     , lifter : Lifter
     , genderButtonText : String
+    , useFormula : Formula
     }
 
 
@@ -82,6 +83,7 @@ initialModel =
     , wilksScore = 0
     , lifter = Male
     , genderButtonText = "Male"
+    , useFormula = formulaForMen
     }
 
 
@@ -99,10 +101,14 @@ view model =
             , button [ name "toggle", class "button", onClick (ToggleGender model.lifter) ] [ text model.genderButtonText ]
             , label [ for "bodyweight", class "label" ] [ text "Bodyweight (kg)" ]
             , input [ name "bodyweight", type_ "text", onInput Bodyweight, value model.bodyWeightFieldValue ] []
-            , label [ for "total", class "label" ] [ text "Total weight lifted (kg)" ]
+            , label [ for "total", class "label" ] [ text "Powerlifting total (kg)" ]
             , input [ name "total", type_ "text", onInput Total, value model.totalLiftsFieldValue ] []
-            , p []
-                [ text ("Your Wilks score " ++ String.fromFloat (calculateWilks model.bodyWeightValue model.totalLiftsValue formulaForWomen))
+            , let
+                { bodyWeightValue, totalLiftsValue, useFormula } =
+                    model
+              in
+              p []
+                [ text ("Your Wilks score " ++ String.fromFloat (calculateWilks bodyWeightValue totalLiftsValue useFormula))
                 , p [] [ text ("Using the formula for: " ++ model.genderButtonText) ]
                 ]
             ]
@@ -128,6 +134,15 @@ calculateWilks bodyweight total formula =
             + (coeffF * (bodyweight ^ 5))
           )
         * total
+
+
+addDangerLabel : Bool -> List (Html.Attribute msg)
+addDangerLabel fieldBoolean =
+    if fieldBoolean == True then
+        [ class "input" ]
+
+    else
+        [ class "input is-danger" ]
 
 
 
@@ -176,14 +191,14 @@ update msg model =
                     { model
                         | lifter = Female
                         , genderButtonText = "Female"
-                        , wilksScore = calculateWilks model.bodyWeightValue model.totalLiftsValue formulaForWomen
+                        , useFormula = formulaForWomen
                     }
 
                 Female ->
                     { model
                         | lifter = Male
                         , genderButtonText = "Male"
-                        , wilksScore = calculateWilks model.bodyWeightValue model.totalLiftsValue formulaForMen
+                        , useFormula = formulaForMen
                     }
 
 

@@ -4371,7 +4371,6 @@ function _Browser_load(url)
 }
 var $author$project$Main$Male = {$: 'Male'};
 var $elm$core$Basics$True = {$: 'True'};
-var $author$project$Main$initialModel = {bodyWeightFieldValid: true, bodyWeightFieldValue: '', bodyWeightValue: 0, genderButtonText: 'Male', lifter: $author$project$Main$Male, totalLiftsFieldValid: true, totalLiftsFieldValue: '', totalLiftsValue: 0, wilksScore: 0};
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -4452,6 +4451,20 @@ var $elm$core$Array$foldr = F3(
 var $elm$core$Array$toList = function (array) {
 	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
 };
+var $elm$core$Basics$mul = _Basics_mul;
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Basics$pow = _Basics_pow;
+var $author$project$Main$formulaForMen = {
+	coeffB: 16.2606339,
+	coeffC: -0.002388645,
+	coeffD: -0.00113732,
+	coeffE: 7.01863 * A2($elm$core$Basics$pow, 10, -6),
+	coeffF: (-1.291) * A2($elm$core$Basics$pow, 10, -8),
+	constantA: -216.0475144
+};
+var $author$project$Main$initialModel = {bodyWeightFieldValid: true, bodyWeightFieldValue: '', bodyWeightValue: 0, genderButtonText: 'Male', lifter: $author$project$Main$Male, totalLiftsFieldValid: true, totalLiftsFieldValue: '', totalLiftsValue: 0, useFormula: $author$project$Main$formulaForMen, wilksScore: 0};
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
 };
@@ -4729,7 +4742,6 @@ var $elm$core$Basics$max = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) > 0) ? x : y;
 	});
-var $elm$core$Basics$mul = _Basics_mul;
 var $elm$core$Array$SubTree = function (a) {
 	return {$: 'SubTree', a: a};
 };
@@ -5182,29 +5194,6 @@ var $elm$browser$Browser$sandbox = function (impl) {
 		});
 };
 var $author$project$Main$Female = {$: 'Female'};
-var $elm$core$Basics$pow = _Basics_pow;
-var $author$project$Main$calculateWilks = F3(
-	function (bodyweight, total, formula) {
-		var _v0 = formula;
-		var constantA = _v0.constantA;
-		var coeffB = _v0.coeffB;
-		var coeffC = _v0.coeffC;
-		var coeffD = _v0.coeffD;
-		var coeffE = _v0.coeffE;
-		var coeffF = _v0.coeffF;
-		return (500 / (((((constantA + (coeffB * bodyweight)) + (coeffC * A2($elm$core$Basics$pow, bodyweight, 2))) + (coeffD * A2($elm$core$Basics$pow, bodyweight, 3))) + (coeffE * A2($elm$core$Basics$pow, bodyweight, 4))) + (coeffF * A2($elm$core$Basics$pow, bodyweight, 5)))) * total;
-	});
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $author$project$Main$formulaForMen = {
-	coeffB: 16.2606339,
-	coeffC: -0.002388645,
-	coeffD: -0.00113732,
-	coeffE: 7.01863 * A2($elm$core$Basics$pow, 10, -6),
-	coeffF: (-1.291) * A2($elm$core$Basics$pow, 10, -8),
-	constantA: -216.0475144
-};
 var $author$project$Main$formulaForWomen = {
 	coeffB: -27.23842536447,
 	coeffC: 0.82112226871,
@@ -5248,19 +5237,11 @@ var $author$project$Main$update = F2(
 				if (currentGender.$ === 'Male') {
 					return _Utils_update(
 						model,
-						{
-							genderButtonText: 'Female',
-							lifter: $author$project$Main$Female,
-							wilksScore: A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForWomen)
-						});
+						{genderButtonText: 'Female', lifter: $author$project$Main$Female, useFormula: $author$project$Main$formulaForWomen});
 				} else {
 					return _Utils_update(
 						model,
-						{
-							genderButtonText: 'Male',
-							lifter: $author$project$Main$Male,
-							wilksScore: A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForMen)
-						});
+						{genderButtonText: 'Male', lifter: $author$project$Main$Male, useFormula: $author$project$Main$formulaForMen});
 				}
 		}
 	});
@@ -5274,6 +5255,17 @@ var $author$project$Main$Total = function (a) {
 	return {$: 'Total', a: a};
 };
 var $elm$html$Html$button = _VirtualDom_node('button');
+var $author$project$Main$calculateWilks = F3(
+	function (bodyweight, total, formula) {
+		var _v0 = formula;
+		var constantA = _v0.constantA;
+		var coeffB = _v0.coeffB;
+		var coeffC = _v0.coeffC;
+		var coeffD = _v0.coeffD;
+		var coeffE = _v0.coeffE;
+		var coeffF = _v0.coeffF;
+		return (500 / (((((constantA + (coeffB * bodyweight)) + (coeffC * A2($elm$core$Basics$pow, bodyweight, 2))) + (coeffD * A2($elm$core$Basics$pow, bodyweight, 3))) + (coeffE * A2($elm$core$Basics$pow, bodyweight, 4))) + (coeffF * A2($elm$core$Basics$pow, bodyweight, 5)))) * total;
+	});
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5438,7 +5430,7 @@ var $author$project$Main$view = function (model) {
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('Total weight lifted (kg)')
+								$elm$html$Html$text('Powerlifting total (kg)')
 							])),
 						A2(
 						$elm$html$Html$input,
@@ -5450,22 +5442,28 @@ var $author$project$Main$view = function (model) {
 								$elm$html$Html$Attributes$value(model.totalLiftsFieldValue)
 							]),
 						_List_Nil),
-						A2(
-						$elm$html$Html$p,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								'Your Wilks score ' + $elm$core$String$fromFloat(
-									A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForWomen))),
-								A2(
-								$elm$html$Html$p,
-								_List_Nil,
-								_List_fromArray(
-									[
-										$elm$html$Html$text('Using the formula for: ' + model.genderButtonText)
-									]))
-							]))
+						function () {
+						var _v0 = model;
+						var bodyWeightValue = _v0.bodyWeightValue;
+						var totalLiftsValue = _v0.totalLiftsValue;
+						var useFormula = _v0.useFormula;
+						return A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text(
+									'Your Wilks score ' + $elm$core$String$fromFloat(
+										A3($author$project$Main$calculateWilks, bodyWeightValue, totalLiftsValue, useFormula))),
+									A2(
+									$elm$html$Html$p,
+									_List_Nil,
+									_List_fromArray(
+										[
+											$elm$html$Html$text('Using the formula for: ' + model.genderButtonText)
+										]))
+								]));
+					}()
 					]))
 			]));
 };
