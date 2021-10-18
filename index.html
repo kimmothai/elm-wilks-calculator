@@ -5254,6 +5254,24 @@ var $author$project$Main$ToggleGender = function (a) {
 var $author$project$Main$Total = function (a) {
 	return {$: 'Total', a: a};
 };
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $author$project$Main$addClass = function (fieldBoolean) {
+	return fieldBoolean ? _List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('input')
+		]) : _List_fromArray(
+		[
+			$elm$html$Html$Attributes$class('input is-danger')
+		]);
+};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $author$project$Main$calculateWilks = F3(
 	function (bodyweight, total, formula) {
@@ -5266,15 +5284,6 @@ var $author$project$Main$calculateWilks = F3(
 		var coeffF = _v0.coeffF;
 		return (500 / (((((constantA + (coeffB * bodyweight)) + (coeffC * A2($elm$core$Basics$pow, bodyweight, 2))) + (coeffD * A2($elm$core$Basics$pow, bodyweight, 3))) + (coeffE * A2($elm$core$Basics$pow, bodyweight, 4))) + (coeffF * A2($elm$core$Basics$pow, bodyweight, 5)))) * total;
 	});
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
-var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
 var $elm$core$String$fromFloat = _String_fromNumber;
@@ -5413,13 +5422,15 @@ var $author$project$Main$view = function (model) {
 							])),
 						A2(
 						$elm$html$Html$input,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$name('bodyweight'),
-								$elm$html$Html$Attributes$type_('text'),
-								$elm$html$Html$Events$onInput($author$project$Main$Bodyweight),
-								$elm$html$Html$Attributes$value(model.bodyWeightFieldValue)
-							]),
+						_Utils_ap(
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$name('bodyweight'),
+									$elm$html$Html$Attributes$type_('text'),
+									$elm$html$Html$Events$onInput($author$project$Main$Bodyweight),
+									$elm$html$Html$Attributes$value(model.bodyWeightFieldValue)
+								]),
+							$author$project$Main$addClass(model.bodyWeightFieldValid)),
 						_List_Nil),
 						A2(
 						$elm$html$Html$label,
@@ -5434,13 +5445,15 @@ var $author$project$Main$view = function (model) {
 							])),
 						A2(
 						$elm$html$Html$input,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$name('total'),
-								$elm$html$Html$Attributes$type_('text'),
-								$elm$html$Html$Events$onInput($author$project$Main$Total),
-								$elm$html$Html$Attributes$value(model.totalLiftsFieldValue)
-							]),
+						_Utils_ap(
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$name('total'),
+									$elm$html$Html$Attributes$type_('text'),
+									$elm$html$Html$Events$onInput($author$project$Main$Total),
+									$elm$html$Html$Attributes$value(model.totalLiftsFieldValue)
+								]),
+							$author$project$Main$addClass(model.totalLiftsFieldValid)),
 						_List_Nil),
 						function () {
 						var _v0 = model;
@@ -5454,14 +5467,7 @@ var $author$project$Main$view = function (model) {
 								[
 									$elm$html$Html$text(
 									'Your Wilks score ' + $elm$core$String$fromFloat(
-										A3($author$project$Main$calculateWilks, bodyWeightValue, totalLiftsValue, useFormula))),
-									A2(
-									$elm$html$Html$p,
-									_List_Nil,
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Using the formula for: ' + model.genderButtonText)
-										]))
+										A3($author$project$Main$calculateWilks, bodyWeightValue, totalLiftsValue, useFormula)))
 								]));
 					}()
 					]))

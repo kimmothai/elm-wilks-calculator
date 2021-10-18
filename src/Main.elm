@@ -100,16 +100,31 @@ view model =
             , label [ for "gender", class "label" ] [ text "Toggle gender" ]
             , button [ name "toggle", class "button", onClick (ToggleGender model.lifter) ] [ text model.genderButtonText ]
             , label [ for "bodyweight", class "label" ] [ text "Bodyweight (kg)" ]
-            , input [ name "bodyweight", type_ "text", onInput Bodyweight, value model.bodyWeightFieldValue ] []
+            , input
+                ([ name "bodyweight"
+                 , type_ "text"
+                 , onInput Bodyweight
+                 , value model.bodyWeightFieldValue
+                 ]
+                    ++ addClass model.bodyWeightFieldValid
+                )
+                []
             , label [ for "total", class "label" ] [ text "Powerlifting total (kg)" ]
-            , input [ name "total", type_ "text", onInput Total, value model.totalLiftsFieldValue ] []
+            , input
+                ([ name "total"
+                 , type_ "text"
+                 , onInput Total
+                 , value model.totalLiftsFieldValue
+                 ]
+                    ++ addClass model.totalLiftsFieldValid
+                )
+                []
             , let
                 { bodyWeightValue, totalLiftsValue, useFormula } =
                     model
               in
               p []
                 [ text ("Your Wilks score " ++ String.fromFloat (calculateWilks bodyWeightValue totalLiftsValue useFormula))
-                , p [] [ text ("Using the formula for: " ++ model.genderButtonText) ]
                 ]
             ]
         ]
@@ -136,8 +151,8 @@ calculateWilks bodyweight total formula =
         * total
 
 
-addDangerLabel : Bool -> List (Html.Attribute msg)
-addDangerLabel fieldBoolean =
+addClass : Bool -> List (Html.Attribute msg)
+addClass fieldBoolean =
     if fieldBoolean == True then
         [ class "input" ]
 
