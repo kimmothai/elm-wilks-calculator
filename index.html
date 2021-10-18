@@ -4369,8 +4369,9 @@ function _Browser_load(url)
 		}
 	}));
 }
+var $author$project$Main$Male = {$: 'Male'};
 var $elm$core$Basics$True = {$: 'True'};
-var $author$project$Main$initialModel = {bodyWeightFieldValid: true, bodyWeightFieldValue: '', bodyWeightValue: 0, totalLiftsFieldValid: true, totalLiftsFieldValue: '', totalLiftsValue: 0, wilksScore: 0};
+var $author$project$Main$initialModel = {bodyWeightFieldValid: true, bodyWeightFieldValue: '', bodyWeightValue: 0, genderButtonText: 'Male', lifter: $author$project$Main$Male, totalLiftsFieldValid: true, totalLiftsFieldValue: '', totalLiftsValue: 0, wilksScore: 0};
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
@@ -5180,43 +5181,65 @@ var $elm$browser$Browser$sandbox = function (impl) {
 			view: impl.view
 		});
 };
+var $author$project$Main$Female = {$: 'Female'};
 var $elm$core$String$toFloat = _String_toFloat;
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'Bodyweight') {
-			var userInput = msg.a;
-			var _v1 = $elm$core$String$toFloat(userInput);
-			if (_v1.$ === 'Nothing') {
-				return _Utils_update(
-					model,
-					{bodyWeightFieldValid: false, bodyWeightFieldValue: userInput});
-			} else {
-				var number = _v1.a;
-				return _Utils_update(
-					model,
-					{bodyWeightFieldValid: true, bodyWeightFieldValue: userInput, bodyWeightValue: number});
-			}
-		} else {
-			var userInput = msg.a;
-			var _v2 = $elm$core$String$toFloat(userInput);
-			if (_v2.$ === 'Nothing') {
-				return _Utils_update(
-					model,
-					{bodyWeightFieldValid: false, totalLiftsFieldValue: userInput});
-			} else {
-				var number = _v2.a;
-				return _Utils_update(
-					model,
-					{totalLiftsFieldValid: true, totalLiftsFieldValue: userInput, totalLiftsValue: number});
-			}
+		switch (msg.$) {
+			case 'Bodyweight':
+				var userInput = msg.a;
+				var _v1 = $elm$core$String$toFloat(userInput);
+				if (_v1.$ === 'Nothing') {
+					return _Utils_update(
+						model,
+						{bodyWeightFieldValid: false, bodyWeightFieldValue: userInput});
+				} else {
+					var number = _v1.a;
+					return _Utils_update(
+						model,
+						{bodyWeightFieldValid: true, bodyWeightFieldValue: userInput, bodyWeightValue: number});
+				}
+			case 'Total':
+				var userInput = msg.a;
+				var _v2 = $elm$core$String$toFloat(userInput);
+				if (_v2.$ === 'Nothing') {
+					return _Utils_update(
+						model,
+						{bodyWeightFieldValid: false, totalLiftsFieldValue: userInput});
+				} else {
+					var number = _v2.a;
+					return _Utils_update(
+						model,
+						{totalLiftsFieldValid: true, totalLiftsFieldValue: userInput, totalLiftsValue: number});
+				}
+			default:
+				var currentGender = msg.a;
+				if (currentGender.$ === 'Male') {
+					return _Utils_update(
+						model,
+						{genderButtonText: 'Female', lifter: $author$project$Main$Female});
+				} else {
+					return _Utils_update(
+						model,
+						{genderButtonText: 'Male', lifter: $author$project$Main$Male});
+				}
 		}
 	});
 var $author$project$Main$Bodyweight = function (a) {
 	return {$: 'Bodyweight', a: a};
 };
+var $author$project$Main$ToggleGender = function (a) {
+	return {$: 'ToggleGender', a: a};
+};
 var $author$project$Main$Total = function (a) {
 	return {$: 'Total', a: a};
 };
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$core$Basics$pow = _Basics_pow;
+var $author$project$Main$calculateWilks = F3(
+	function (bodyweight, total, formula) {
+		return (500 / (((((formula.constantA + (formula.coeffB * bodyweight)) + (formula.coeffC * A2($elm$core$Basics$pow, bodyweight, 2))) + (formula.coeffD * A2($elm$core$Basics$pow, bodyweight, 3))) + (formula.coeffE * A2($elm$core$Basics$pow, bodyweight, 4))) + (formula.coeffF * A2($elm$core$Basics$pow, bodyweight, 5)))) * total;
+	});
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5228,19 +5251,46 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $author$project$Main$formulaForMen = {
+	coeffB: 16.2606339,
+	coeffC: -0.002388645,
+	coeffD: -0.00113732,
+	coeffE: 7.01863 * A2($elm$core$Basics$pow, 10, -6),
+	coeffF: (-1.291) * A2($elm$core$Basics$pow, 10, -8),
+	constantA: -216.0475144
+};
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
 var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
 	return {$: 'MayStopPropagation', a: a};
 };
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
 		return A2(
@@ -5315,6 +5365,30 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$label,
 						_List_fromArray(
 							[
+								$elm$html$Html$Attributes$for('gender'),
+								$elm$html$Html$Attributes$class('label')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Toggle gender')
+							])),
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$name('toggle'),
+								$elm$html$Html$Attributes$class('button'),
+								$elm$html$Html$Events$onClick(
+								$author$project$Main$ToggleGender(model.lifter))
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(model.genderButtonText)
+							])),
+						A2(
+						$elm$html$Html$label,
+						_List_fromArray(
+							[
 								$elm$html$Html$Attributes$for('bodyweight'),
 								$elm$html$Html$Attributes$class('label')
 							]),
@@ -5359,7 +5433,15 @@ var $author$project$Main$view = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'Your Wilks score ' + $elm$core$String$fromFloat(model.bodyWeightValue))
+								'Your Wilks score ' + $elm$core$String$fromFloat(
+									A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForMen))),
+								A2(
+								$elm$html$Html$p,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Using the formula for: ' + model.genderButtonText)
+									]))
 							]))
 					]))
 			]));
