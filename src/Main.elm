@@ -92,7 +92,7 @@ view model =
                 [ h1 [ class "title" ] [ text "Wilks score calculator" ]
                 , div [ class "block" ]
                     [ p [ class "subtitle" ] [ text "Made by Kimmo Thai" ]
-                    , a [ href "https://github.com/kimmothai" ] [ text "Project source" ]
+                    , a [ href "https://github.com/kimmothai/elm-wilks-calculator" ] [ text "Project home page" ]
                     ]
                 , div [ class "block" ]
                     [ p [ class "content is-size-6-mobile has-text-justified" ]
