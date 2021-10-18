@@ -22,4 +22,18 @@ https://en.wikipedia.org/wiki/Wilks_coefficient
 - [ ] Reformat the code to use more of Elm's features.
 - [ ] Review the Model. There are some unused variables that either can be used in the future, or discarded now.
 - [ ] Implement the UI using Elm-UI and not Bulma.
-- [ ] Round the score with two decimals
+- [x] Round the score with two decimals
+- [ ] Figure out how to keep the Bulma.css and FontAwesome in index.html. They are lost after compiling.
+
+## Vanishing Bulma and FontAwesome in index.html
+
+```
+<script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.css"
+    ></script>
+<link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+```
