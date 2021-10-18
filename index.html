@@ -5182,6 +5182,37 @@ var $elm$browser$Browser$sandbox = function (impl) {
 		});
 };
 var $author$project$Main$Female = {$: 'Female'};
+var $elm$core$Basics$pow = _Basics_pow;
+var $author$project$Main$calculateWilks = F3(
+	function (bodyweight, total, formula) {
+		var _v0 = formula;
+		var constantA = _v0.constantA;
+		var coeffB = _v0.coeffB;
+		var coeffC = _v0.coeffC;
+		var coeffD = _v0.coeffD;
+		var coeffE = _v0.coeffE;
+		var coeffF = _v0.coeffF;
+		return (500 / (((((constantA + (coeffB * bodyweight)) + (coeffC * A2($elm$core$Basics$pow, bodyweight, 2))) + (coeffD * A2($elm$core$Basics$pow, bodyweight, 3))) + (coeffE * A2($elm$core$Basics$pow, bodyweight, 4))) + (coeffF * A2($elm$core$Basics$pow, bodyweight, 5)))) * total;
+	});
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $author$project$Main$formulaForMen = {
+	coeffB: 16.2606339,
+	coeffC: -0.002388645,
+	coeffD: -0.00113732,
+	coeffE: 7.01863 * A2($elm$core$Basics$pow, 10, -6),
+	coeffF: (-1.291) * A2($elm$core$Basics$pow, 10, -8),
+	constantA: -216.0475144
+};
+var $author$project$Main$formulaForWomen = {
+	coeffB: -27.23842536447,
+	coeffC: 0.82112226871,
+	coeffD: -0.00930733913,
+	coeffE: 4.731582 * A2($elm$core$Basics$pow, 10, -5),
+	coeffF: (-9.054) * A2($elm$core$Basics$pow, 10, -8),
+	constantA: 594.31747775582
+};
 var $elm$core$String$toFloat = _String_toFloat;
 var $author$project$Main$update = F2(
 	function (msg, model) {
@@ -5217,11 +5248,19 @@ var $author$project$Main$update = F2(
 				if (currentGender.$ === 'Male') {
 					return _Utils_update(
 						model,
-						{genderButtonText: 'Female', lifter: $author$project$Main$Female});
+						{
+							genderButtonText: 'Female',
+							lifter: $author$project$Main$Female,
+							wilksScore: A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForWomen)
+						});
 				} else {
 					return _Utils_update(
 						model,
-						{genderButtonText: 'Male', lifter: $author$project$Main$Male});
+						{
+							genderButtonText: 'Male',
+							lifter: $author$project$Main$Male,
+							wilksScore: A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForMen)
+						});
 				}
 		}
 	});
@@ -5235,11 +5274,6 @@ var $author$project$Main$Total = function (a) {
 	return {$: 'Total', a: a};
 };
 var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$core$Basics$pow = _Basics_pow;
-var $author$project$Main$calculateWilks = F3(
-	function (bodyweight, total, formula) {
-		return (500 / (((((formula.constantA + (formula.coeffB * bodyweight)) + (formula.coeffC * A2($elm$core$Basics$pow, bodyweight, 2))) + (formula.coeffD * A2($elm$core$Basics$pow, bodyweight, 3))) + (formula.coeffE * A2($elm$core$Basics$pow, bodyweight, 4))) + (formula.coeffF * A2($elm$core$Basics$pow, bodyweight, 5)))) * total;
-	});
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5251,17 +5285,6 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $author$project$Main$formulaForMen = {
-	coeffB: 16.2606339,
-	coeffC: -0.002388645,
-	coeffD: -0.00113732,
-	coeffE: 7.01863 * A2($elm$core$Basics$pow, 10, -6),
-	coeffF: (-1.291) * A2($elm$core$Basics$pow, 10, -8),
-	constantA: -216.0475144
-};
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
@@ -5434,7 +5457,7 @@ var $author$project$Main$view = function (model) {
 							[
 								$elm$html$Html$text(
 								'Your Wilks score ' + $elm$core$String$fromFloat(
-									A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForMen))),
+									A3($author$project$Main$calculateWilks, model.bodyWeightValue, model.totalLiftsValue, $author$project$Main$formulaForWomen))),
 								A2(
 								$elm$html$Html$p,
 								_List_Nil,

@@ -67,7 +67,7 @@ formulaForWomen =
     , coeffC = 0.82112226871
     , coeffD = -0.00930733913
     , coeffE = 4.731582 * 10 ^ -5
-    , coeffF = -1.291 * 10 ^ -8
+    , coeffF = -9.054 * 10 ^ -8
     }
 
 
@@ -102,7 +102,7 @@ view model =
             , label [ for "total", class "label" ] [ text "Total weight lifted (kg)" ]
             , input [ name "total", type_ "text", onInput Total, value model.totalLiftsFieldValue ] []
             , p []
-                [ text ("Your Wilks score " ++ String.fromFloat (calculateWilks model.bodyWeightValue model.totalLiftsValue formulaForMen))
+                [ text ("Your Wilks score " ++ String.fromFloat (calculateWilks model.bodyWeightValue model.totalLiftsValue formulaForWomen))
                 , p [] [ text ("Using the formula for: " ++ model.genderButtonText) ]
                 ]
             ]
@@ -115,13 +115,17 @@ view model =
 
 calculateWilks : Float -> Float -> Formula -> Float
 calculateWilks bodyweight total formula =
+    let
+        { constantA, coeffB, coeffC, coeffD, coeffE, coeffF } =
+            formula
+    in
     500
-        / (formula.constantA
-            + (formula.coeffB * bodyweight)
-            + (formula.coeffC * (bodyweight ^ 2))
-            + (formula.coeffD * (bodyweight ^ 3))
-            + (formula.coeffE * (bodyweight ^ 4))
-            + (formula.coeffF * (bodyweight ^ 5))
+        / (constantA
+            + (coeffB * bodyweight)
+            + (coeffC * (bodyweight ^ 2))
+            + (coeffD * (bodyweight ^ 3))
+            + (coeffE * (bodyweight ^ 4))
+            + (coeffF * (bodyweight ^ 5))
           )
         * total
 
@@ -172,12 +176,14 @@ update msg model =
                     { model
                         | lifter = Female
                         , genderButtonText = "Female"
+                        , wilksScore = calculateWilks model.bodyWeightValue model.totalLiftsValue formulaForWomen
                     }
 
                 Female ->
                     { model
                         | lifter = Male
                         , genderButtonText = "Male"
+                        , wilksScore = calculateWilks model.bodyWeightValue model.totalLiftsValue formulaForMen
                     }
 
 
