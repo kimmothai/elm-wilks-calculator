@@ -15,6 +15,7 @@ https://en.wikipedia.org/wiki/Wilks_coefficient
 - The first compilation felt satisfying. "If it compiles, it probably works" was true again. The code did not work before everything was in place. Coming from Javascript, this was a very new way of doing things.
 - Keep pushing the limits. I deliberately tried to avoid reformatting prematurely. Overall, I think it was for the best as no time was wasted in this.
 - "Let ... in" can be used inside view definitions.
+- Bulma.css is a very nice tool and I might even prefer over Material-UI now.
 
 ## To do
 

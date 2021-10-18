@@ -1,9 +1,10 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, h1, h2, input, label, p, section, text)
-import Html.Attributes exposing (class, for, name, type_, value)
+import Html exposing (Html, a, button, div, h1, h2, input, label, p, section, text)
+import Html.Attributes exposing (class, for, href, name, type_, value)
 import Html.Events exposing (onClick, onInput)
+import Round exposing (round)
 
 
 
@@ -20,12 +21,6 @@ type alias Gender =
     }
 
 
-male : Gender
-male =
-    { label = "Male"
-    }
-
-
 type alias Model =
     { bodyWeightValue : Float
     , bodyWeightFieldValue : String
@@ -33,7 +28,6 @@ type alias Model =
     , totalLiftsValue : Float
     , totalLiftsFieldValue : String
     , totalLiftsFieldValid : Bool
-    , wilksScore : Float
     , lifter : Lifter
     , genderButtonText : String
     , useFormula : Formula
@@ -80,7 +74,6 @@ initialModel =
     , totalLiftsValue = 0
     , totalLiftsFieldValue = ""
     , totalLiftsFieldValid = True
-    , wilksScore = 0
     , lifter = Male
     , genderButtonText = "Male"
     , useFormula = formulaForMen
@@ -93,38 +86,66 @@ initialModel =
 
 view : Model -> Html Msg
 view model =
-    section [ class "section" ]
+    section [ class "section has-background-white-bis" ]
         [ div [ class "container" ]
-            [ h1 [ class "title" ] [ text "Wilks score calculator" ]
-            , h2 [ class "subtitle" ] [ text "The Wilks coefficient or Wilks formula is a mathematical coefficient that can be used to measure the relative strengths of powerlifters despite the different weight classes of the lifters. Robert Wilks, the former CEO of Powerlifting Australia, is the author of the formula. " ]
-            , label [ for "gender", class "label" ] [ text "Toggle gender" ]
-            , button [ name "toggle", class "button", onClick (ToggleGender model.lifter) ] [ text model.genderButtonText ]
-            , label [ for "bodyweight", class "label" ] [ text "Bodyweight (kg)" ]
-            , input
-                ([ name "bodyweight"
-                 , type_ "text"
-                 , onInput Bodyweight
-                 , value model.bodyWeightFieldValue
-                 ]
-                    ++ addClass model.bodyWeightFieldValid
-                )
-                []
-            , label [ for "total", class "label" ] [ text "Powerlifting total (kg)" ]
-            , input
-                ([ name "total"
-                 , type_ "text"
-                 , onInput Total
-                 , value model.totalLiftsFieldValue
-                 ]
-                    ++ addClass model.totalLiftsFieldValid
-                )
-                []
-            , let
-                { bodyWeightValue, totalLiftsValue, useFormula } =
-                    model
-              in
-              p []
-                [ text ("Your Wilks score " ++ String.fromFloat (calculateWilks bodyWeightValue totalLiftsValue useFormula))
+            [ div [ class "content" ]
+                [ h1 [ class "title" ] [ text "Wilks score calculator" ]
+                , div [ class "block" ]
+                    [ p [ class "subtitle" ] [ text "Made by Kimmo Thai" ]
+                    , a [ href "https://github.com/kimmothai" ] [ text "Project source" ]
+                    ]
+                , div [ class "block" ]
+                    [ p [ class "content is-size-6-mobile has-text-justified" ]
+                        [ text "The Wilks coefficient or Wilks formula is a mathematical coefficient that can be used to measure the relative strengths of powerlifters despite the different weight classes of the lifters. Robert Wilks, the former CEO of Powerlifting Australia, is the author of the formula. "
+                        ]
+                    ]
+                , div [ class "block" ]
+                    [ label [ for "gender", class "label" ] [ text "Toggle gender" ]
+                    , button
+                        ([ name "toggle"
+                         , onClick (ToggleGender model.lifter)
+                         ]
+                            ++ (if model.genderButtonText == "Male" then
+                                    [ class "button is-primary" ]
+
+                                else
+                                    [ class "button is-info" ]
+                               )
+                        )
+                        [ text model.genderButtonText ]
+                    ]
+                , div [ class "block" ]
+                    [ label [ for "bodyweight", class "label" ] [ text "Bodyweight (kg)" ]
+                    , input
+                        ([ name "bodyweight"
+                         , type_ "text"
+                         , onInput Bodyweight
+                         , value model.bodyWeightFieldValue
+                         ]
+                            ++ addClass model.bodyWeightFieldValid
+                        )
+                        []
+                    , label [ for "total", class "label" ] [ text "Powerlifting total (kg)" ]
+                    , input
+                        ([ name "total"
+                         , type_ "text"
+                         , onInput Total
+                         , value model.totalLiftsFieldValue
+                         ]
+                            ++ addClass model.totalLiftsFieldValid
+                        )
+                        []
+                    ]
+                , div [ class "score box" ]
+                    [ h2 [ class "score has-text-weight-bold" ] [ text "Your Wilks score is: " ]
+                    , let
+                        { bodyWeightValue, totalLiftsValue, useFormula } =
+                            model
+                      in
+                      p [ class "score is-size-2" ]
+                        [ text (Round.round 2 (calculateWilks bodyWeightValue totalLiftsValue useFormula))
+                        ]
+                    ]
                 ]
             ]
         ]
@@ -190,7 +211,7 @@ update msg model =
                 Nothing ->
                     { model
                         | totalLiftsFieldValue = userInput
-                        , bodyWeightFieldValid = False
+                        , totalLiftsFieldValid = False
                     }
 
                 Just number ->
