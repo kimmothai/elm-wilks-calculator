@@ -4,7 +4,7 @@ import Browser
 import Html exposing (Html, a, button, div, h1, h2, input, label, p, section, text)
 import Html.Attributes exposing (class, for, href, name, type_, value)
 import Html.Events exposing (onClick, onInput)
-import Round exposing (round)
+import Round
 
 
 
@@ -14,11 +14,6 @@ import Round exposing (round)
 type Lifter
     = Male
     | Female
-
-
-type alias Gender =
-    { label : String
-    }
 
 
 type alias Model =
